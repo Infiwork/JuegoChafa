@@ -30,7 +30,7 @@ public class screenMenu implements Screen{
 		camera = new OrthographicCamera(1, h/w);
 		batch = new SpriteBatch();
 		
-		texture = new Texture(Gdx.files.internal("Menu.png"));
+		texture = new Texture(Gdx.files.internal("juego.png"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);

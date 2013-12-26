@@ -1,54 +1,60 @@
 package com.juegochafa.game;
 
+import com.juegochafa.actors.Robot;
 import com.mi.superjuego.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class screenGame implements Screen{
 	Game game;
+	Robot robot;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
+	private float worldWidth=80, worldHeight=45;
 
 	public screenGame(Game game){
 		this.game=game;	
 		create();
 	}
 	private void create() {
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
 		
-		camera = new OrthographicCamera(1, h/w);
+		camera = new OrthographicCamera(worldWidth, worldHeight);
+		camera.position.set(worldWidth/2, worldHeight/2, 0);
 		batch = new SpriteBatch();
 		
-		texture = new Texture(Gdx.files.internal("juego.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		robot = new Robot();
 		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		
-		sprite = new Sprite(region);
-		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
+		texture = new Texture(Gdx.files.internal("droid.png"));
+		sprite = new Sprite(texture);
 		
 	}
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		robot.run();
+		
+		camera.update();
+		Gdx.gl.glClearColor( 0.5f, 0.5f, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
 		batch.setProjectionMatrix(camera.combined);
+		batch.enableBlending();
 		batch.begin();
+		
+		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
+		sprite.setSize(5, 5);
+		sprite.setPosition(robot.getX(), robot.getY());
+		sprite.setRotation(robot.getRotation());
+		
 		sprite.draw(batch);
+		
+		
 		batch.end();	
 	}
 
