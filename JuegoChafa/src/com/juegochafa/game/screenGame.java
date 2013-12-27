@@ -6,18 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 public class screenGame implements Screen{
 	Game game;
 	Robot robot;
+	Vector3 touchpoint;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	private Texture texture;
-	private Sprite sprite;
 	private float worldWidth=80, worldHeight=45;
 
 	public screenGame(Game game){
@@ -32,13 +30,11 @@ public class screenGame implements Screen{
 		
 		robot = new Robot();
 		
-		texture = new Texture(Gdx.files.internal("droid.png"));
-		sprite = new Sprite(texture);
+		touchpoint = new Vector3();
 		
 	}
 	@Override
 	public void render(float delta) {
-		robot.run();
 		
 		camera.update();
 		Gdx.gl.glClearColor( 0.5f, 0.5f, 1, 1);
@@ -47,14 +43,14 @@ public class screenGame implements Screen{
 		batch.enableBlending();
 		batch.begin();
 		
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setSize(5, 5);
-		sprite.setPosition(robot.getX(), robot.getY());
-		sprite.setRotation(robot.getRotation());
+		if(Gdx.input.isTouched()){
+			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+			robot.touch(touchpoint.x,touchpoint.y);
+		}
 		
-		sprite.draw(batch);
-		
-		
+		robot.run();
+		//Dibujar robot
+		robot.getSprite().draw(batch);
 		batch.end();	
 	}
 
@@ -91,7 +87,6 @@ public class screenGame implements Screen{
 	@Override
 	public void dispose() {
 		batch.dispose();
-		texture.dispose();
 		
 	}
 
