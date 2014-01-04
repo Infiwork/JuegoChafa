@@ -14,6 +14,8 @@ public class Robot {
 	private Texture texture;
 	private Sprite sprite;
 	
+	private boolean robotTouched;
+	
 	public Robot(){
 		//propiedades robot
 		x=30; y=1;
@@ -22,6 +24,8 @@ public class Robot {
 		rotation=-45;
 		
 		position = new Vector3(x,y,0);
+		
+		robotTouched = false;
 		
 		//Texturas
 		texture = new Texture(Gdx.files.internal("droid.png"));
@@ -34,6 +38,8 @@ public class Robot {
 		sprite.setSize(spriteWidth, spriteHeight);
 		
 	}
+	
+	
 	
 	public void run(){
 		//Choque en eje X
@@ -49,10 +55,15 @@ public class Robot {
 			stateY*=-1;
 			rotation+=(90*(stateX*stateY));
 		}
-		//Movimiento constante
-		//y+=speedY;
-		//x+=speedX;
 		
+		if(getRobotTouched()){
+			
+		}
+		else{
+			//Movimiento constante
+			y+=speedY;
+			x+=speedX;
+		}
 		position.set(x+(spriteWidth/2), y+(spriteHeight/2), 0);
 		
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
@@ -63,7 +74,6 @@ public class Robot {
 	}
 	
 	public boolean justTouch(Vector3 vector){
-		System.out.println(Gdx.input.justTouched());
 		if(position.dst(vector)<=3){
 			return true;
 		}
@@ -88,11 +98,22 @@ public class Robot {
 	}
 
 	public void setX(float x){
+		x -= spriteWidth/2;
+		if(x <= worldWidth-(spriteWidth) && x >= 0)
 		this.x = x;
 	}
 	
 	public void setY(float y){
+		y -= spriteHeight/2;
+		if(y <= worldHeight-(spriteHeight) && y >= 0)
 		this.y= y;
 	}
 	
+	public void setRobotTouched(boolean robotTouched){
+		this.robotTouched = robotTouched;
+	}
+	
+	public boolean getRobotTouched(){
+		return robotTouched;
+	}
 }
