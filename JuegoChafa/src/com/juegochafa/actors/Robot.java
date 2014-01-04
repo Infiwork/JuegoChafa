@@ -15,12 +15,15 @@ public class Robot {
 	private Sprite sprite;
 	
 	public Robot(){
+		//propiedades robot
 		x=30; y=1;
 		speedX=0.2f; speedY=0.2f;
 		stateX=1; stateY=1;
 		rotation=-45;
 		
 		position = new Vector3(x,y,0);
+		
+		//Texturas
 		texture = new Texture(Gdx.files.internal("droid.png"));
 		sprite = new Sprite(texture);
 		
@@ -30,10 +33,6 @@ public class Robot {
 		
 		sprite.setSize(spriteWidth, spriteHeight);
 		
-	}
-	
-	public void live(){
-		run();
 	}
 	
 	public void run(){
@@ -51,25 +50,25 @@ public class Robot {
 			rotation+=(90*(stateX*stateY));
 		}
 		//Movimiento constante
-		y+=speedY;
-		x+=speedX;
+		//y+=speedY;
+		//x+=speedX;
 		
-		position.set(x, y, 0);
+		position.set(x+(spriteWidth/2), y+(spriteHeight/2), 0);
 		
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 		sprite.setPosition(x, y);
 		sprite.setRotation(rotation);
+		
+		
 	}
 	
-	public void touch(float x, float y){
-		
-		
-		if(position.dst(x, y, 0)<=6){
-			this.x = x-(spriteWidth/2);
-			this.y = y-(spriteHeight/2);
+	public boolean justTouch(Vector3 vector){
+		System.out.println(Gdx.input.justTouched());
+		if(position.dst(vector)<=3){
+			return true;
 		}
-		//sprite.setPosition(x, y);
-		
+		else
+			return false;
 	}
 	
 	public float getX(){
@@ -95,4 +94,5 @@ public class Robot {
 	public void setY(float y){
 		this.y= y;
 	}
+	
 }

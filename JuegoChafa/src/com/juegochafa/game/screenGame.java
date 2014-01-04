@@ -18,6 +18,7 @@ public class screenGame implements Screen{
 	private SpriteBatch batch;
 	private float worldWidth=80, worldHeight=45;
 
+	private boolean robotTouched;
 	public screenGame(Game game){
 		this.game=game;	
 		create();
@@ -29,6 +30,7 @@ public class screenGame implements Screen{
 		batch = new SpriteBatch();
 		
 		robot = new Robot();
+		robotTouched = false;
 		
 		touchpoint = new Vector3();
 		
@@ -43,13 +45,18 @@ public class screenGame implements Screen{
 		batch.enableBlending();
 		batch.begin();
 		
-		if(Gdx.input.isTouched()){
+		if(Gdx.input.justTouched()){
 			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-			robot.touch(touchpoint.x,touchpoint.y);
+			if(robot.justTouch(touchpoint)){
+				robotTouched = true;
+			}	
 		}
 		
-		robot.run();
+		if(Gdx.input.isTouched()){
+			//if(robo)
+		}
 		//Dibujar robot
+		robot.run();
 		robot.getSprite().draw(batch);
 		batch.end();	
 	}
