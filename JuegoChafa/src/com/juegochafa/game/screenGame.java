@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 public class screenGame implements Screen{
 	Game game;
 	Robot robot;
+	Robot robot2;
 	Vector3 touchpoint;
 	
 	private OrthographicCamera camera;
@@ -28,7 +29,8 @@ public class screenGame implements Screen{
 		camera.position.set(worldWidth/2, worldHeight/2, 0);
 		batch = new SpriteBatch();
 		
-		robot = new Robot();
+		robot = new Robot(0,0);
+		robot2 = new Robot(3,4);
 		
 		touchpoint = new Vector3();
 		
@@ -43,19 +45,11 @@ public class screenGame implements Screen{
 		batch.enableBlending();
 		batch.begin();
 		
-		if(Gdx.input.justTouched()){
-			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-			robot.setRobotTouched(robot.justTouch(touchpoint));	
-		}
-		if(robot.getRobotTouched()){
-			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-			robot.setX(touchpoint.x); 
-			robot.setY(touchpoint.y);
-			robot.setRobotTouched(Gdx.input.isTouched());
-		}
-		
+		robot2.live(camera);
+		robot.live(camera);
 		//Dibujar robot
-		robot.run();
+		//robot.run();
+		robot2.getSprite().draw(batch);
 		robot.getSprite().draw(batch);
 		batch.end();	
 	}
@@ -69,7 +63,7 @@ public class screenGame implements Screen{
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Show");
 	}
 
 	@Override

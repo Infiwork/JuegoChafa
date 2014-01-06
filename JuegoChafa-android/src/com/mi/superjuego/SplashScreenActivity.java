@@ -10,7 +10,7 @@ import android.content.Intent;
 
 public class SplashScreenActivity extends Activity {
 
-  private long splashDelay = 6000; //a qui esperas el tiempo
+  private long splashDelay = 1000; //a qui esperas el tiempo
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
