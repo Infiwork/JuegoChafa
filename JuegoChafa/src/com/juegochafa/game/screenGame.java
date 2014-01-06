@@ -7,18 +7,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class screenGame implements Screen{
 	Game game;
 	Robot robot;
-	Robot robot2;
+	Robot[] robotArray;
 	Vector3 touchpoint;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private float worldWidth=80, worldHeight=45;
 
+	int n = 10;
 	public screenGame(Game game){
 		this.game=game;	
 		create();
@@ -29,8 +31,14 @@ public class screenGame implements Screen{
 		camera.position.set(worldWidth/2, worldHeight/2, 0);
 		batch = new SpriteBatch();
 		
-		robot = new Robot(0,0);
-		robot2 = new Robot(3,4);
+		
+	    robotArray = new Robot[n];  
+	    for (int i = 0; i< n ; i++){
+		robotArray[i] = new Robot(MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345)); //* 2 *
+	    
+	    }
+		
+		robot = new Robot (MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345));
 		
 		touchpoint = new Vector3();
 		
@@ -45,12 +53,15 @@ public class screenGame implements Screen{
 		batch.enableBlending();
 		batch.begin();
 		
-		robot2.live(camera);
+		 for (int i = 0; i< n ; i++){
+				robotArray[i].live(camera);
+				robotArray[i].getSprite().draw(batch);
+		 }
 		robot.live(camera);
 		//Dibujar robot
 		//robot.run();
-		robot2.getSprite().draw(batch);
 		robot.getSprite().draw(batch);
+		
 		batch.end();	
 	}
 
@@ -63,7 +74,6 @@ public class screenGame implements Screen{
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		System.out.println("Show");
 	}
 
 	@Override

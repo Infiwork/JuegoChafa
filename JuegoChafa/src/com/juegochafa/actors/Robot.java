@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class Robot {
-	private float x, y, speedX, speedY, stateX, stateY, rotation;
+	private float x, y, speedX, speedY, speedGlobal, stateX, stateY, rotation;
 	private float spriteWidth, spriteHeight;
 	private float worldWidth=80, worldHeight=45;
 	
@@ -19,15 +20,21 @@ public class Robot {
 	
 	private boolean robotTouched;
 	
-	public Robot(float x, float y){
+	public Robot(float x, float y, float rotation){
 		//propiedades robot
-		speedX=0.2f; speedY=0.2f;
+		//speedX=0.1f; speedY=0.1f;
+		this.x = x; this.y = y;
 		stateX=1; stateY=1;
-		rotation=-45;
-		spriteWidth=5; spriteHeight=5;
+		
+		speedGlobal = 0.1f;
+
+		setSpeedX(rotation, speedGlobal);
+		setSpeedY(rotation, speedGlobal);
+		
+		spriteWidth=6; spriteHeight=6;
 		
 		//Texturas
-		texture = new Texture(Gdx.files.internal("droid.png"));
+		texture = new Texture(Gdx.files.internal("robotv3.png"));
 		sprite = new Sprite(texture);
 		
 		//Sprite
@@ -83,13 +90,13 @@ public class Robot {
 		
 		sprite.setOrigin(origin.x, origin.y);
 		sprite.setPosition(x, y);
-		sprite.setRotation(rotation);
+		//sprite.setRotation(rotation);
 		
 		
 	}
 	
 	public boolean justTouch(Vector3 vector){
-		if(position.dst(vector)<=3){
+		if(position.dst(vector)<=4){
 			return true;
 		}
 		else
@@ -112,6 +119,14 @@ public class Robot {
 		return sprite;
 	}
 
+	public void setSpeedX(float rotation, float speed){
+		speedX = MathUtils.cosDeg(rotation)*speed;
+	}
+	
+	public void setSpeedY(float rotation, float speed){
+		speedY = MathUtils.sinDeg(rotation)*speed;
+	}
+
 	public void setX(float x){
 		//x += origin.x;
 		if(x <= worldWidth && x >= 0)
@@ -124,6 +139,9 @@ public class Robot {
 		position.y= y;
 	}
 	
+	public void setSpeedGlobal(float speed){
+		speedGlobal=speed;
+	}
 	public void setRobotTouched(boolean robotTouched){
 		this.robotTouched = robotTouched;
 	}
