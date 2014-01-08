@@ -6,7 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
@@ -15,6 +18,10 @@ public class screenGame implements Screen{
 	Robot robot;
 	Robot[] robotArray;
 	Vector3 touchpoint;
+	
+	Texture textfondo;
+	TextureRegion textReg;
+	Sprite fondo;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -30,6 +37,13 @@ public class screenGame implements Screen{
 		camera = new OrthographicCamera(worldWidth, worldHeight);
 		camera.position.set(worldWidth/2, worldHeight/2, 0);
 		batch = new SpriteBatch();
+		
+		
+		textfondo = new Texture(Gdx.files.internal("fondo.png"));
+		textReg =  new TextureRegion(textfondo, 1024, 700);
+		
+		fondo= new Sprite(textReg);
+		
 		
 		
 	    robotArray = new Robot[n];  
@@ -52,6 +66,8 @@ public class screenGame implements Screen{
 		batch.setProjectionMatrix(camera.combined);
 		batch.enableBlending();
 		batch.begin();
+		fondo.setSize(worldWidth, worldHeight);
+		fondo.draw(batch);
 		
 		 for (int i = 0; i< n ; i++){
 				robotArray[i].live(camera);

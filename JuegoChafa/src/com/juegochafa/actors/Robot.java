@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Robot {
 	private float x, y, speedX, speedY, speedGlobal, stateX, stateY, rotation;
 	private float spriteWidth, spriteHeight;
-	private float worldWidth=80, worldHeight=45;
+	private float worldWidth=80, worldHeight=38;
 	
 	private Vector3 position, origin;
 	private Texture texture;
@@ -31,10 +31,10 @@ public class Robot {
 		setSpeedX(rotation, speedGlobal);
 		setSpeedY(rotation, speedGlobal);
 		
-		spriteWidth=6; spriteHeight=6;
+		spriteWidth=10; spriteHeight=10;
 		
 		//Texturas
-		texture = new Texture(Gdx.files.internal("robotv3.png"));
+		texture = new Texture(Gdx.files.internal("robot3.png"));
 		sprite = new Sprite(texture);
 		
 		//Sprite
@@ -96,7 +96,7 @@ public class Robot {
 	}
 	
 	public boolean justTouch(Vector3 vector){
-		if(position.dst(vector)<=4){
+		if(position.dst(vector)<=5){
 			return true;
 		}
 		else
