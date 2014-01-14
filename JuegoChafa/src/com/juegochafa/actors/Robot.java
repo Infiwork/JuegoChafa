@@ -8,9 +8,14 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class Robot {
-	private float x, y, speedX, speedY, speedGlobal, stateX, stateY, rotation;
-	private float spriteWidth, spriteHeight;
+	private float x, y, speedX, speedY, rotation;
+	private float stateX = 1, stateY = 1;
+	private float speedGlobal = 0.1f;
+	private float spriteWidth = 10, spriteHeight = 10;
 	private float worldWidth=80, worldHeight=38;
+	private boolean robotTouched = false;
+	private boolean robotElected = false;
+	private int id;
 	
 	private Vector3 position, origin;
 	private Texture texture;
@@ -18,20 +23,16 @@ public class Robot {
 	
 	private Vector3 touchpoint;
 	
-	private boolean robotTouched;
 	
-	public Robot(float x, float y, float rotation){
+	
+	public Robot(float x, float y, float rotation, int id){
 		//propiedades robot
-		//speedX=0.1f; speedY=0.1f;
-		this.x = x; this.y = y;
-		stateX=1; stateY=1;
 		
-		speedGlobal = 0.1f;
-
+		this.x = x; this.y = y;
+		this.id = id;
 		setSpeedX(rotation, speedGlobal);
 		setSpeedY(rotation, speedGlobal);
 		
-		spriteWidth=10; spriteHeight=10;
 		
 		//Texturas
 		texture = new Texture(Gdx.files.internal("robot3.png"));
@@ -42,24 +43,33 @@ public class Robot {
 		origin = new Vector3(spriteWidth/2,spriteHeight/2,0);
 		position = new Vector3(x+origin.x,y+origin.y,0);
 
-		robotTouched = false;
-		touchpoint =  new Vector3();
-		
-		
+		touchpoint =  new Vector3();	
 	}
+	
 	public void live(Camera camera){
+		setRobotTouched(false);
+		
 		if(Gdx.input.justTouched()){
 			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			setRobotTouched(justTouch(touchpoint));	
 		}
-		if(getRobotTouched()){
+		
+		if(getRobotElected()){
+			setRobotElected(Gdx.input.isTouched());
 			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			setX(touchpoint.x); 
 			setY(touchpoint.y);
-			setRobotTouched(Gdx.input.isTouched());
+			
+		}
+		else{
+			run();
 		}
 		
-		run();
+		x=position.x-origin.x;
+		y=position.y-origin.y;
+		
+		sprite.setOrigin(origin.x, origin.y);
+		sprite.setPosition(x, y);
 	}
 	
 	public void run(){
@@ -85,14 +95,7 @@ public class Robot {
 			position.y+=speedY;
 			position.x+=speedX;
 		}
-		x=position.x-origin.x;
-		y=position.y-origin.y;
-		
-		sprite.setOrigin(origin.x, origin.y);
-		sprite.setPosition(x, y);
-		//sprite.setRotation(rotation);
-		
-		
+	
 	}
 	
 	public boolean justTouch(Vector3 vector){
@@ -113,6 +116,10 @@ public class Robot {
 	
 	public float getRotation(){
 		return rotation;
+	}
+	
+	public int getId(){
+		return id;
 	}
 	
 	public Sprite getSprite(){
@@ -148,5 +155,12 @@ public class Robot {
 	
 	public boolean getRobotTouched(){
 		return robotTouched;
+	}
+	public void setRobotElected(boolean robotElected){
+		this.robotElected = robotElected;
+	}
+	
+	public boolean getRobotElected(){
+		return robotElected;
 	}
 }

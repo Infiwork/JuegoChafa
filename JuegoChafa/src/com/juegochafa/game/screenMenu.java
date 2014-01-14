@@ -70,7 +70,6 @@ public class screenMenu implements Screen{
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -89,7 +88,6 @@ public class screenMenu implements Screen{
 	public void dispose() {
 		batch.dispose();
 		texture.dispose();
-		
 	}
 
 }

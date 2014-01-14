@@ -1,5 +1,7 @@
 package com.juegochafa.game;
 
+import java.util.Stack;
+
 import com.juegochafa.actors.Robot;
 import com.mi.superjuego.Game;
 import com.badlogic.gdx.Gdx;
@@ -23,11 +25,14 @@ public class screenGame implements Screen{
 	TextureRegion textReg;
 	Sprite fondo;
 	
+	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private float worldWidth=80, worldHeight=45;
 
-	int n = 10;
+	int n =20;
+	Stack<Integer> cola;
+	
 	public screenGame(Game game){
 		this.game=game;	
 		create();
@@ -44,15 +49,15 @@ public class screenGame implements Screen{
 		
 		fondo= new Sprite(textReg);
 		
+		cola = new Stack<Integer>();
 		
-		
-	    robotArray = new Robot[n];  
-	    for (int i = 0; i< n ; i++){
-		robotArray[i] = new Robot(MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345)); //* 2 *
+	    robotArray = new Robot[n];
 	    
+	    for (int i = 0; i< n ; i++){
+	    	robotArray[i] = new Robot(MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345),i); //* 2 *
 	    }
 		
-		robot = new Robot (MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345));
+		//robot = new Robot (MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345));
 		
 		touchpoint = new Vector3();
 		
@@ -70,17 +75,38 @@ public class screenGame implements Screen{
 		fondo.draw(batch);
 		
 		 for (int i = 0; i< n ; i++){
-				robotArray[i].live(camera);
+			 	robotArray[i].live(camera);
 				robotArray[i].getSprite().draw(batch);
+				if(robotArray[i].getRobotTouched()){
+					cola.push(i);
+				}	
 		 }
-		robot.live(camera);
+		int x=-1, temp;
+		 while(!cola.empty()){
+			 temp=cola.pop();
+			 System.out.println(temp);
+			 if(temp>x){
+				 x=temp;
+			 }
+		 }
+		 if(x>=0){
+			 System.out.println("selecionado "+x);
+			 robotArray[x].setRobotElected(true);
+		 }
+		 //System.out.println("este es:" + x);
+		// robotArray[i].setRobotElected(true);
+		//for(int j =0; j<w.length;j++){
+			//
+		//}
+		 
 		//Dibujar robot
 		//robot.run();
-		robot.getSprite().draw(batch);
+		//robot.getSprite().draw(batch);
+		//robot.live(camera);
 		
 		batch.end();	
 	}
-
+		
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
@@ -90,6 +116,9 @@ public class screenGame implements Screen{
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
+	
+			
+			
 	}
 
 	@Override
