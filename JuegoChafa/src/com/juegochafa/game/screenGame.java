@@ -3,6 +3,7 @@ package com.juegochafa.game;
 import java.util.Stack;
 
 import com.juegochafa.actors.Robot;
+import com.juegochafa.actors.Teleport;
 import com.mi.superjuego.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,12 +26,13 @@ public class screenGame implements Screen{
 	TextureRegion textReg;
 	Sprite fondo;
 	
+	Teleport tele;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private float worldWidth=80, worldHeight=45;
 
-	int n =20;
+	int n = 20;
 	Stack<Integer> cola;
 	
 	public screenGame(Game game){
@@ -49,12 +51,12 @@ public class screenGame implements Screen{
 		
 		fondo= new Sprite(textReg);
 		
-		cola = new Stack<Integer>();
+		tele = new Teleport();
 		
+		cola = new Stack<Integer>();
 	    robotArray = new Robot[n];
-	    
 	    for (int i = 0; i< n ; i++){
-	    	robotArray[i] = new Robot(MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345),i); //* 2 *
+	    	robotArray[i] = new Robot(MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(35, 335)); //* 2 *
 	    }
 		
 		//robot = new Robot (MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345));
@@ -73,13 +75,21 @@ public class screenGame implements Screen{
 		batch.begin();
 		fondo.setSize(worldWidth, worldHeight);
 		fondo.draw(batch);
-		
+		tele.getSprite().draw(batch);	
+		Vector3 v=new Vector3();
+		// Codigo para tocar solo un robot
 		 for (int i = 0; i< n ; i++){
 			 	robotArray[i].live(camera);
 				robotArray[i].getSprite().draw(batch);
+				//Codigo de colisiones para los paneles
+				if(robotArray[i].getPosition().dst(tele.getPosition())<=7){
+					robotArray[i].collisionX();
+					robotArray[i].collisionY();
+				}
+				//	
 				if(robotArray[i].getRobotTouched()){
 					cola.push(i);
-				}	
+				}
 		 }
 		int x=-1, temp;
 		 while(!cola.empty()){
@@ -93,17 +103,7 @@ public class screenGame implements Screen{
 			 System.out.println("selecionado "+x);
 			 robotArray[x].setRobotElected(true);
 		 }
-		 //System.out.println("este es:" + x);
-		// robotArray[i].setRobotElected(true);
-		//for(int j =0; j<w.length;j++){
-			//
-		//}
-		 
-		//Dibujar robot
-		//robot.run();
-		//robot.getSprite().draw(batch);
-		//robot.live(camera);
-		
+		 	
 		batch.end();	
 	}
 		
