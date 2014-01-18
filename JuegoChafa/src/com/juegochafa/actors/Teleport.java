@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Teleport {
 	private float x, y;
-	private float width=7, height=7;
+	private float width=10, height=10;
 	
 	private Texture texture;
 	private Sprite sprite;

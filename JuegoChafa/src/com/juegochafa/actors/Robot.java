@@ -14,6 +14,8 @@ public class Robot {
 	private float worldWidth=80, worldHeight=38;
 	private boolean robotTouched = false;
 	private boolean robotElected = false;
+	private boolean robotDropped = false;
+	private boolean switchDropped= false;
 	
 	private float deltaTime;
 	private Vector3 position, origin;
@@ -45,20 +47,27 @@ public class Robot {
 	
 	public void live(Camera camera){
 		setRobotTouched(false);
+		setRobotDropped(false);
 		
 		if(Gdx.input.justTouched()){
 			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			setRobotTouched(justTouch(touchpoint));	
 		}
-		
+		// <-- Sale a avisar que fue tocado
+		// --> Regresa si es el unico
 		if(getRobotElected()){
 			setRobotElected(Gdx.input.isTouched());
 			camera.unproject(touchpoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 			setX(touchpoint.x); 
 			setY(touchpoint.y);
-			
+			switchDropped = true;
 		}
 		else{
+			if(switchDropped){
+				setRobotDropped(true);
+				System.out.println("Este es el valor "+ switchDropped);
+				switchDropped=false;
+			}
 			run();
 		}
 		
@@ -157,6 +166,7 @@ public class Robot {
 	public boolean getRobotTouched(){
 		return robotTouched;
 	}
+	
 	public void setRobotElected(boolean robotElected){
 		this.robotElected = robotElected;
 	}
@@ -164,4 +174,14 @@ public class Robot {
 	public boolean getRobotElected(){
 		return robotElected;
 	}
+	
+	public void setRobotDropped(boolean robotDropped){
+		this.robotDropped = robotDropped;
+	}
+	
+	public boolean getRobotDropped(){
+		return robotDropped;
+	}
+	
+	
 }

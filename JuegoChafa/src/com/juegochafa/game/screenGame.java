@@ -1,9 +1,6 @@
 package com.juegochafa.game;
 
-import java.util.Stack;
-
-import com.juegochafa.actors.Robot;
-import com.juegochafa.actors.Teleport;
+import com.juegochafa.actors.Level;
 import com.mi.superjuego.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,53 +10,37 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class screenGame implements Screen{
 	Game game;
-	Robot robot;
-	Robot[] robotArray;
+	
 	Vector3 touchpoint;
 	
 	Texture textfondo;
 	TextureRegion textReg;
 	Sprite fondo;
 	
-	Teleport tele;
+	Level level;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private float worldWidth=80, worldHeight=45;
-
-	int n = 20;
-	Stack<Integer> cola;
 	
 	public screenGame(Game game){
 		this.game=game;	
 		create();
 	}
 	private void create() {
-		
 		camera = new OrthographicCamera(worldWidth, worldHeight);
 		camera.position.set(worldWidth/2, worldHeight/2, 0);
 		batch = new SpriteBatch();
 		
-		
+		level = new Level();
 		textfondo = new Texture(Gdx.files.internal("fondo.png"));
 		textReg =  new TextureRegion(textfondo, 1024, 700);
 		
 		fondo= new Sprite(textReg);
-		
-		tele = new Teleport();
-		
-		cola = new Stack<Integer>();
-	    robotArray = new Robot[n];
-	    for (int i = 0; i< n ; i++){
-	    	robotArray[i] = new Robot(MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(35, 335)); //* 2 *
-	    }
-		
-		//robot = new Robot (MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(25, 345));
 		
 		touchpoint = new Vector3();
 		
@@ -75,34 +56,7 @@ public class screenGame implements Screen{
 		batch.begin();
 		fondo.setSize(worldWidth, worldHeight);
 		fondo.draw(batch);
-		tele.getSprite().draw(batch);	
-		Vector3 v=new Vector3();
-		// Codigo para tocar solo un robot
-		 for (int i = 0; i< n ; i++){
-			 	robotArray[i].live(camera);
-				robotArray[i].getSprite().draw(batch);
-				//Codigo de colisiones para los paneles
-				if(robotArray[i].getPosition().dst(tele.getPosition())<=7){
-					robotArray[i].collisionX();
-					robotArray[i].collisionY();
-				}
-				//	
-				if(robotArray[i].getRobotTouched()){
-					cola.push(i);
-				}
-		 }
-		int x=-1, temp;
-		 while(!cola.empty()){
-			 temp=cola.pop();
-			 System.out.println(temp);
-			 if(temp>x){
-				 x=temp;
-			 }
-		 }
-		 if(x>=0){
-			 System.out.println("selecionado "+x);
-			 robotArray[x].setRobotElected(true);
-		 }
+		level.render(camera, batch);
 		 	
 		batch.end();	
 	}
