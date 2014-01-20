@@ -3,6 +3,7 @@ package com.juegochafa.actors;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -10,28 +11,22 @@ import com.badlogic.gdx.math.MathUtils;
 public class Level {
 	
 	Robot robot;
-	Robot[] robotArray;
 	Teleport tele;
-	
 	Stack<Integer> selectedTemp;
 	ArrayList<Robot> robots;
 	
-	int n = 8;
+	boolean GameOver=false;
+	
+	float time = 0;
 	
 	public Level(){
-		robotArray = new Robot[n];
 		robots = new ArrayList<Robot>();
-	    for (int i = 0; i< n ; i++){
-	    	robotArray[i] = new Robot(MathUtils.random(10, 70),MathUtils.random(10, 35),MathUtils.random(35, 335)); //* 2 *
-	    	robots.add(robotArray[i]);
-	    }
-
 		tele = new Teleport();
-		
 		selectedTemp = new Stack<Integer>();
 	}
 	
 	public void render(Camera camera, SpriteBatch batch){
+		time += Gdx.graphics.getDeltaTime();
 		tele.getSprite().draw(batch);	
 		// Codigo para tocar solo un robot
 		 for (int i = 0; i< robots.size() ; i++){
@@ -48,14 +43,18 @@ public class Level {
 				}
 				// Eliminar robot al solarlo cerca del teleporter
 				if(robots.get(i).getRobotDropped())
-				if(robots.get(i).getPosition().dst(tele.getPosition())<=6){
+				if(robots.get(i).getPosition().dst(tele.getPosition())<6.5){
 					robots.remove(i);
 				}
 		 }
 		if(!selectedTemp.empty())
 			robotSelected();
 		
-		if(robots.size()==5) respawnRobots();
+		
+		//System.out.println("Tiempo "+time);
+		
+		if(((int) time)%5==0)
+		if(robots.size()<5) respawnRobots();
 		
 	}
 	

@@ -1,9 +1,8 @@
 package com.juegochafa.game;
 
 import com.juegochafa.actors.Level;
-import com.mi.superjuego.Game;
+import com.mi.superjuego.ChafaGame;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,9 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
-public class screenGame implements Screen{
-	Game game;
-	
+public class ScreenGame extends AbstractScreen{
 	Vector3 touchpoint;
 	
 	Texture textfondo;
@@ -27,24 +24,10 @@ public class screenGame implements Screen{
 	private SpriteBatch batch;
 	private float worldWidth=80, worldHeight=45;
 	
-	public screenGame(Game game){
-		this.game=game;	
-		create();
-	}
-	private void create() {
-		camera = new OrthographicCamera(worldWidth, worldHeight);
-		camera.position.set(worldWidth/2, worldHeight/2, 0);
-		batch = new SpriteBatch();
-		
-		level = new Level();
-		textfondo = new Texture(Gdx.files.internal("fondo.png"));
-		textReg =  new TextureRegion(textfondo, 1024, 700);
-		
-		fondo= new Sprite(textReg);
-		
-		touchpoint = new Vector3();
-		
-	}
+	public ScreenGame(ChafaGame game) {
+        super(game);
+    }
+	
 	@Override
 	public void render(float delta) {
 		
@@ -70,32 +53,23 @@ public class screenGame implements Screen{
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-	
-			
-			
+		camera = new OrthographicCamera(worldWidth, worldHeight);
+		camera.position.set(worldWidth/2, worldHeight/2, 0);
+		batch = new SpriteBatch();
+		
+		level = new Level();
+		System.out.println(game.manager.update());
+		textfondo = game.manager.get("fondo.png");
+		textReg =  new TextureRegion(textfondo, 1024, 700);
+		
+		fondo= new Sprite(textReg);
+		
+		touchpoint = new Vector3();
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dispose() {
-		batch.dispose();
 		
 	}
 

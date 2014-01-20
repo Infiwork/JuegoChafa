@@ -11,6 +11,6 @@ public class Main {
 		cfg.width = 800;
 		cfg.height = 450;
 		
-		new LwjglApplication(new Game(), cfg);
+		new LwjglApplication(new ChafaGame(), cfg);
 	}
 }
