@@ -1,6 +1,8 @@
 package com.juegochafa.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,12 +23,13 @@ public class Robot {
 	private Vector3 position, origin;
 	private Texture texture;
 	private Sprite sprite;
+	private Sound touchRobot;
 	
-	private Vector3 touchpoint;
+	private Vector3 touchpoint = new Vector3();
 	
 	
 	
-	public Robot(float x, float y, float rotation){
+	public Robot(float x, float y, float rotation, AssetManager manager){
 		//propiedades robot
 		
 		this.x = x; this.y = y;
@@ -34,15 +37,14 @@ public class Robot {
 		setSpeedY(rotation, speedGlobal);
 		
 		//Texturas
-		texture = new Texture(Gdx.files.internal("robot3.png"));
+		texture = manager.get("robot3.png");
 		sprite = new Sprite(texture);
+		touchRobot = manager.get("audio/robot_jump.ogg");
 		
 		//Sprite
 		sprite.setSize(spriteWidth, spriteHeight);
 		origin = new Vector3(spriteWidth/2,spriteHeight/2,0);
 		position = new Vector3(x+origin.x,y+origin.y,0);
-
-		touchpoint =  new Vector3();	
 	}
 	
 	public void live(Camera camera){
@@ -183,5 +185,7 @@ public class Robot {
 		return robotDropped;
 	}
 	
-	
+	public void soundSelectRobot(){
+		touchRobot.play(1.0f);
+	}
 }

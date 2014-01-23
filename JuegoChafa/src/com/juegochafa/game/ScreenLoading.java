@@ -1,6 +1,8 @@
 package com.juegochafa.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -69,9 +71,15 @@ public class ScreenLoading extends AbstractScreen {
         stage.addActor(logo);
 
         // Assets for menu
+        
         game.manager.load("juego.png", Texture.class);
         //Assets for Game
+        game.manager.load("audio/background_game.ogg",Music.class);
+        game.manager.load("audio/robot_jump.ogg",Sound.class);
         game.manager.load("fondo.png", Texture.class);
+        game.manager.load("robot3.png", Texture.class);
+        game.manager.load("circulo.png", Texture.class);
+       
         // game.manager.load("data/assets2.pack", TextureAtlas.class);
         // game.manager.load("data/assets3.pack", TextureAtlas.class);
     }
@@ -117,9 +125,9 @@ public class ScreenLoading extends AbstractScreen {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         if (game.manager.update()) { // Load some, will return true if done loading
-            if (Gdx.input.isTouched()) { // If the screen is touched after the game is done loading, go to the main menu screen
+            
                 game.setScreen(new ScreenMenu(game));
-            }
+            
         }
 
         // Interpolate the percentage to make it more smooth

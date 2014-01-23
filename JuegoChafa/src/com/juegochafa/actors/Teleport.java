@@ -1,6 +1,7 @@
 package com.juegochafa.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
@@ -15,11 +16,11 @@ public class Teleport {
 	private Vector3 position;
 	
 	
-	public Teleport(){
+	public Teleport(AssetManager manager){
 		x=10; y=10;
 		
 		position = new Vector3(x+(width/2),y+(height/2),0);
-		texture = new Texture(Gdx.files.internal("circulo.png"));
+		texture = manager.get("circulo.png");
 		sprite = new Sprite(texture);
 		
 		//Sprite
@@ -42,8 +43,4 @@ public class Teleport {
 	public Vector3 getPosition(){
 		return position;
 	}
-}
-
-class LeftBottom extends Teleport{
-	
 }

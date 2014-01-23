@@ -16,6 +16,7 @@ public class ScreenGame extends AbstractScreen{
 	
 	Texture textfondo;
 	TextureRegion textReg;
+	
 	Sprite fondo;
 	
 	Level level;
@@ -56,12 +57,13 @@ public class ScreenGame extends AbstractScreen{
 		camera = new OrthographicCamera(worldWidth, worldHeight);
 		camera.position.set(worldWidth/2, worldHeight/2, 0);
 		batch = new SpriteBatch();
-		
-		level = new Level();
-		System.out.println(game.manager.update());
+		long time_start, time_end;
+        time_start = System.currentTimeMillis();
+		level = new Level(game.manager);
 		textfondo = game.manager.get("fondo.png");
 		textReg =  new TextureRegion(textfondo, 1024, 700);
-		
+		time_end = System.currentTimeMillis();
+        System.out.println("the task has taken "+ ( time_end - time_start ) +" milliseconds");
 		fondo= new Sprite(textReg);
 		
 		touchpoint = new Vector3();
@@ -70,7 +72,8 @@ public class ScreenGame extends AbstractScreen{
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+		game.manager.unload("audio/background_game.ogg");
+		game.manager.unload("audio/robot_jump.ogg");
 	}
 
 }

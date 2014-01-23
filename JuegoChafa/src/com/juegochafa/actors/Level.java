@@ -4,25 +4,40 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Level {
 	
+	// Objetos
 	Robot robot;
 	Teleport tele;
+	
+	//Datos
 	Stack<Integer> selectedTemp;
 	ArrayList<Robot> robots;
 	
+	//Variables
 	boolean GameOver=false;
-	
 	float time = 0;
 	
-	public Level(){
+	//Assets
+	AssetManager manager;
+	Music backgroundGame;
+	
+	public Level(AssetManager manager){
+		long time_start, time_end;
+        time_start = System.currentTimeMillis();
 		robots = new ArrayList<Robot>();
-		tele = new Teleport();
+		tele = new Teleport(manager);
 		selectedTemp = new Stack<Integer>();
+		this.manager = manager;
+		musicBackgroundGame();
+		time_end = System.currentTimeMillis();
+        System.out.println("Tiempo total "+ ( time_end - time_start ) +" milliseconds");
 	}
 	
 	public void render(Camera camera, SpriteBatch batch){
@@ -59,7 +74,7 @@ public class Level {
 	}
 	
 	public void respawnRobots(){
-		robot = new Robot(40,0,MathUtils.random(35, 165));
+        robot = new Robot(40,0,MathUtils.random(35, 165), manager);
 		robots.add(robot);
 	}
 	
@@ -73,7 +88,12 @@ public class Level {
 			 }
 		 }
 		 robots.get(x).setRobotElected(true);
+		 robots.get(x).soundSelectRobot();
 	}
-
 	
+	public void musicBackgroundGame(){
+		backgroundGame = manager.get("audio/background_game.ogg");
+		backgroundGame.play();
+		backgroundGame.setLooping(true);
+	}
 }
