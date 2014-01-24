@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -15,17 +14,18 @@ public class Robot {
 	private float x, y, speedX, speedY, rotation;
 	private float speedGlobal = 5f;
 	private float spriteWidth = 10, spriteHeight = 10;
-	//private float countDown = 20;
+	private float countDown = 20;
 	private float worldWidth=80, worldHeight=38;
 	private boolean robotTouched = false;
 	private boolean robotElected = false;
 	private boolean robotDropped = false;
 	private boolean switchDropped= false;
+	private boolean robotExplosion = false;
 	
 	private float deltaTime;
+	private float timeFrames = 0;
 	private Vector3 position, origin;
-	private Texture texture;
-	private Sprite sprite;
+	
 	private Animation runAnimation;
 	private Texture runTexture;
 	private TextureRegion[] runTextureRegion;
@@ -34,10 +34,11 @@ public class Robot {
 	//private TextureRegion t;
 	
 	private Sound touchRobot;
+	private Sound explosionRobot;
 	
 	private Vector3 touchpoint = new Vector3();
 	
-	float timeTotal = 0;
+	
 	
 	
 	public Robot(float x, float y, float rotation, AssetManager manager){
@@ -47,17 +48,11 @@ public class Robot {
 		setSpeedX(rotation, speedGlobal);
 		setSpeedY(rotation, speedGlobal);
 		
-		//Texturas
-		texture = manager.get("robot3.png");
-		sprite = new Sprite(texture);
 		touchRobot = manager.get("audio/robot_jump.ogg");
+		explosionRobot = manager.get("audio/button.ogg");
 		
-		//Sprite
-		sprite.setSize(spriteWidth, spriteHeight);
 		origin = new Vector3(spriteWidth/2,spriteHeight/2,0);
 		position = new Vector3(x+origin.x,y+origin.y,0);
-		
-		//t = new TextureRegion(runTexture, 768, 126);
 		
 		createRunAnimation(manager.get("sprite.png", Texture.class));
 	}
@@ -90,8 +85,6 @@ public class Robot {
 		x=position.x-origin.x;
 		y=position.y-origin.y;
 		
-		sprite.setOrigin(origin.x, origin.y);
-		sprite.setPosition(x, y);
 	}
 	
 	public void run(){
@@ -113,11 +106,12 @@ public class Robot {
 			//Movimiento constante
 			position.y+=(speedY*deltaTime);
 			position.x+=(speedX*deltaTime);
-			//countDown-=deltaTime;
 			
-			timeTotal += deltaTime;
+			if(!robotExplosion)
+			explosionCountDown(deltaTime);
 			
-			runFrame = runAnimation.getKeyFrame(timeTotal/10,true);
+			timeFrames += (deltaTime/10);
+			runFrame = runAnimation.getKeyFrame(timeFrames,true);
 		}
 	
 	}
@@ -139,6 +133,20 @@ public class Robot {
 	public void collisionY(){
 		speedY*=-1;
 	}
+	float temp=0;
+	public void explosionCountDown(float delta){
+		countDown-=delta;
+		temp+=delta;
+		//System.out.println(countDown+" temoral "+temp+" division "+ (countDown/10));
+		if(countDown<=15){
+			if(temp > (countDown/10)){
+				soundSelectRobot();
+				temp=0;
+			}
+			if(countDown<=0) robotExplosion = true;
+		}
+		
+	}
 
 	public TextureRegion getFrameRun(){
 		return runFrame;
@@ -156,6 +164,10 @@ public class Robot {
 		return robotElected;
 	}
 	
+	public boolean getRobotExplosion(){
+		return robotExplosion;
+	}
+	
 	public boolean getRobotTouched(){
 		return robotTouched;
 	}
@@ -166,10 +178,6 @@ public class Robot {
 	
 	public TextureRegion getRun(){
 		return runTextureRegion[2];
-	}
-	
-	public Sprite getSprite(){
-		return sprite;
 	}
 	
 	public float getX(){
@@ -225,5 +233,9 @@ public class Robot {
 	
 	public void soundSelectRobot(){
 		touchRobot.play(1.0f);
+	}
+	
+	public void soundExplosionRobot(){
+		explosionRobot.play(1.0f);
 	}
 }

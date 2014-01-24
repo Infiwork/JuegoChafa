@@ -46,7 +46,6 @@ public class Level {
 		// Codigo para tocar solo un robot
 		 for (int i = 0; i< robots.size() ; i++){
 			 	robots.get(i).live(camera);
-			 	//robots.get(i).getSprite().draw(batch);
 			 	batch.draw(robots.get(i).getFrameRun(), robots.get(i).getX(), robots.get(i).getY(), 10, 10);
 				//Codigo de colisiones para los paneles
 				if(robots.get(i).getPosition().dst(tele.getPosition())<=7){
@@ -71,7 +70,7 @@ public class Level {
 		//System.out.println("Tiempo "+time);
 		
 		if(((int) time)%5==0)
-		if(robots.size()<10) respawnRobots();
+		if(robots.size()<1) respawnRobots();
 		
 	}
 	

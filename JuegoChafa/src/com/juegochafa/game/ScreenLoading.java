@@ -75,6 +75,7 @@ public class ScreenLoading extends AbstractScreen {
         game.manager.load("juego.png", Texture.class);
         //Assets for Game
         game.manager.load("audio/background_game.ogg",Music.class);
+        game.manager.load("audio/button.ogg",Sound.class);
         game.manager.load("audio/robot_jump.ogg",Sound.class);
         game.manager.load("fondo.png", Texture.class);
         game.manager.load("robot3.png", Texture.class);
