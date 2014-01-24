@@ -5,7 +5,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
@@ -13,6 +15,7 @@ public class Robot {
 	private float x, y, speedX, speedY, rotation;
 	private float speedGlobal = 5f;
 	private float spriteWidth = 10, spriteHeight = 10;
+	//private float countDown = 20;
 	private float worldWidth=80, worldHeight=38;
 	private boolean robotTouched = false;
 	private boolean robotElected = false;
@@ -23,10 +26,18 @@ public class Robot {
 	private Vector3 position, origin;
 	private Texture texture;
 	private Sprite sprite;
+	private Animation runAnimation;
+	private Texture runTexture;
+	private TextureRegion[] runTextureRegion;
+	private TextureRegion runFrame;
+	
+	//private TextureRegion t;
+	
 	private Sound touchRobot;
 	
 	private Vector3 touchpoint = new Vector3();
 	
+	float timeTotal = 0;
 	
 	
 	public Robot(float x, float y, float rotation, AssetManager manager){
@@ -45,6 +56,10 @@ public class Robot {
 		sprite.setSize(spriteWidth, spriteHeight);
 		origin = new Vector3(spriteWidth/2,spriteHeight/2,0);
 		position = new Vector3(x+origin.x,y+origin.y,0);
+		
+		//t = new TextureRegion(runTexture, 768, 126);
+		
+		createRunAnimation(manager.get("sprite.png", Texture.class));
 	}
 	
 	public void live(Camera camera){
@@ -67,7 +82,6 @@ public class Robot {
 		else{
 			if(switchDropped){
 				setRobotDropped(true);
-				System.out.println("Este es el valor "+ switchDropped);
 				switchDropped=false;
 			}
 			run();
@@ -82,12 +96,12 @@ public class Robot {
 	
 	public void run(){
 		deltaTime = Gdx.graphics.getDeltaTime();
-		//Choque en eje X
+		// Choque en eje X
 		if((position.x >= worldWidth||position.x < 0)){
 			speedX*=-1;
 		}
 		
-		/* |           Choque en eje Y               |*/
+		// Choque en eje Y 
 		if((position.y >= worldHeight||position.y < 0) ){
 			speedY*=-1;
 		}
@@ -99,16 +113,63 @@ public class Robot {
 			//Movimiento constante
 			position.y+=(speedY*deltaTime);
 			position.x+=(speedX*deltaTime);
+			//countDown-=deltaTime;
+			
+			timeTotal += deltaTime;
+			
+			runFrame = runAnimation.getKeyFrame(timeTotal/10,true);
 		}
 	
 	}
 	
-	public boolean justTouch(Vector3 vector){
-		if(position.dst(vector)<=5){
-			return true;
+	public void createRunAnimation(Texture texture){
+		runTexture = texture;
+		TextureRegion[][] tmp = TextureRegion.split(runTexture,runTexture.getWidth()/4, runTexture.getHeight());
+		runTextureRegion = new TextureRegion[3];
+		for (int i = 0; i < 3; i++) {
+			runTextureRegion[i] = tmp[0][i];
 		}
-		else
-			return false;
+		runAnimation = new Animation (0.025f, runTextureRegion);
+	}
+	
+	public void collisionX(){
+		speedX*=-1;
+	}
+	
+	public void collisionY(){
+		speedY*=-1;
+	}
+
+	public TextureRegion getFrameRun(){
+		return runFrame;
+	}
+
+	public Vector3 getPosition(){
+		return position;
+	}
+	
+	public boolean getRobotDropped(){
+		return robotDropped;
+	}
+	
+	public boolean getRobotElected(){
+		return robotElected;
+	}
+	
+	public boolean getRobotTouched(){
+		return robotTouched;
+	}
+	
+	public float getRotation(){
+		return rotation;
+	}
+	
+	public TextureRegion getRun(){
+		return runTextureRegion[2];
+	}
+	
+	public Sprite getSprite(){
+		return sprite;
 	}
 	
 	public float getX(){
@@ -119,18 +180,31 @@ public class Robot {
 		return y;
 	}
 	
-	public Vector3 getPosition(){
-		return position;
+	public boolean justTouch(Vector3 vector){
+		if(position.dst(vector)<=5){
+			return true;
+		}
+		else
+			return false;
 	}
 	
-	public float getRotation(){
-		return rotation;
+	public void setRobotDropped(boolean robotDropped){
+		this.robotDropped = robotDropped;
 	}
 	
-	public Sprite getSprite(){
-		return sprite;
+	public void setRobotElected(boolean robotElected){
+		this.robotElected = robotElected;
 	}
-
+	
+	public void setRobotTouched(boolean robotTouched){
+		this.robotTouched = robotTouched;
+	}
+	
+	
+	public void setSpeedGlobal(float speed){
+		speedGlobal=speed;
+	}
+	
 	public void setSpeedX(float rotation, float speed){
 		speedX = MathUtils.cosDeg(rotation)*speed;
 	}
@@ -147,42 +221,6 @@ public class Robot {
 	public void setY(float y){
 		if(y <= worldHeight && y >= 0)
 		position.y= y;
-	}
-	
-	public void setSpeedGlobal(float speed){
-		speedGlobal=speed;
-	}
-	
-	public void collisionX(){
-		speedX*=-1;
-	}
-	
-	public void collisionY(){
-		speedY*=-1;
-	}
-	
-	public void setRobotTouched(boolean robotTouched){
-		this.robotTouched = robotTouched;
-	}
-	
-	public boolean getRobotTouched(){
-		return robotTouched;
-	}
-	
-	public void setRobotElected(boolean robotElected){
-		this.robotElected = robotElected;
-	}
-	
-	public boolean getRobotElected(){
-		return robotElected;
-	}
-	
-	public void setRobotDropped(boolean robotDropped){
-		this.robotDropped = robotDropped;
-	}
-	
-	public boolean getRobotDropped(){
-		return robotDropped;
 	}
 	
 	public void soundSelectRobot(){

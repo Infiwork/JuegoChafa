@@ -59,7 +59,6 @@ public class ScreenMenu extends AbstractScreen{
 		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
-		System.out.println("todo paso");
 	}
 
 	@Override
@@ -67,6 +66,7 @@ public class ScreenMenu extends AbstractScreen{
 		// TODO Auto-generated method stub
 		batch.dispose();
 		texture.dispose();
+		game.manager.unload("juego.png");
 	}
 
 }

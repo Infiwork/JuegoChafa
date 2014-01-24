@@ -79,6 +79,8 @@ public class ScreenLoading extends AbstractScreen {
         game.manager.load("fondo.png", Texture.class);
         game.manager.load("robot3.png", Texture.class);
         game.manager.load("circulo.png", Texture.class);
+        //game.manager.load("sprite_volando.png", Texture.class);
+        game.manager.load("sprite.png", Texture.class);
        
         // game.manager.load("data/assets2.pack", TextureAtlas.class);
         // game.manager.load("data/assets3.pack", TextureAtlas.class);
@@ -125,9 +127,7 @@ public class ScreenLoading extends AbstractScreen {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         if (game.manager.update()) { // Load some, will return true if done loading
-            
                 game.setScreen(new ScreenMenu(game));
-            
         }
 
         // Interpolate the percentage to make it more smooth

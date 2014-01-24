@@ -74,6 +74,9 @@ public class ScreenGame extends AbstractScreen{
 		// TODO Auto-generated method stub
 		game.manager.unload("audio/background_game.ogg");
 		game.manager.unload("audio/robot_jump.ogg");
+		game.manager.unload("fondo.png");
+        game.manager.unload("robot3.png");
+        game.manager.unload("circulo.png");
 	}
 
 }

@@ -13,7 +13,6 @@ public class ChafaGame extends Game {
 
     @Override
     public void create() {
-    	System.out.println("hola");
         setScreen(new ScreenLoading(this));
     }
 }
