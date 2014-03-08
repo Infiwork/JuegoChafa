@@ -77,12 +77,12 @@ public class ScreenLoading extends AbstractScreen {
         game.manager.load("audio/background_game.ogg",Music.class);
         game.manager.load("audio/button.ogg",Sound.class);
         game.manager.load("audio/robot_jump.ogg",Sound.class);
-        game.manager.load("fondo.png", Texture.class);
+        game.manager.load("escenario.png", Texture.class);
         game.manager.load("robot3.png", Texture.class);
         game.manager.load("circulo.png", Texture.class);
         //game.manager.load("sprite_volando.png", Texture.class);
-        game.manager.load("sprite.png", Texture.class);
-       
+        game.manager.load("sprite_robot_azul.png", Texture.class);
+        game.manager.finishLoading();
         // game.manager.load("data/assets2.pack", TextureAtlas.class);
         // game.manager.load("data/assets3.pack", TextureAtlas.class);
     }

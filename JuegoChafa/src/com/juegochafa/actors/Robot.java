@@ -54,7 +54,7 @@ public class Robot {
 		origin = new Vector3(spriteWidth/2,spriteHeight/2,0);
 		position = new Vector3(x+origin.x,y+origin.y,0);
 		
-		createRunAnimation(manager.get("sprite.png", Texture.class));
+		createRunAnimation(manager.get("sprite_robot_azul.png", Texture.class));
 	}
 	
 	public void live(Camera camera){
@@ -110,7 +110,7 @@ public class Robot {
 			if(!robotExplosion)
 			explosionCountDown(deltaTime);
 			
-			timeFrames += (deltaTime/10);
+			timeFrames += (deltaTime/8);
 			runFrame = runAnimation.getKeyFrame(timeFrames,true);
 		}
 	
@@ -118,9 +118,9 @@ public class Robot {
 	
 	public void createRunAnimation(Texture texture){
 		runTexture = texture;
-		TextureRegion[][] tmp = TextureRegion.split(runTexture,runTexture.getWidth()/4, runTexture.getHeight());
-		runTextureRegion = new TextureRegion[3];
-		for (int i = 0; i < 3; i++) {
+		TextureRegion[][] tmp = TextureRegion.split(runTexture,200, 290);
+		runTextureRegion = new TextureRegion[5];
+		for (int i = 0; i < 5; i++) {
 			runTextureRegion[i] = tmp[0][i];
 		}
 		runAnimation = new Animation (0.025f, runTextureRegion);
@@ -133,6 +133,11 @@ public class Robot {
 	public void collisionY(){
 		speedY*=-1;
 	}
+	
+	public void disposeAssets(){
+		runTexture.dispose();
+	}
+	
 	float temp=0;
 	public void explosionCountDown(float delta){
 		countDown-=delta;

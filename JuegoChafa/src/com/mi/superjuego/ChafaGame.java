@@ -11,8 +11,15 @@ public class ChafaGame extends Game {
      */
     public AssetManager manager = new AssetManager();
 
+    public static IReqHandler ExternalHandler;
+
+	public ChafaGame(IReqHandler irh){
+		ChafaGame.ExternalHandler = irh;
+	}
     @Override
     public void create() {
+    //	ExternalHandler.showAd(true); //shows banner ad
+  
         setScreen(new ScreenLoading(this));
     }
 }

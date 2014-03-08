@@ -42,11 +42,11 @@ public class Level {
 	
 	public void render(Camera camera, SpriteBatch batch){
 		time += Gdx.graphics.getDeltaTime();
-		tele.getSprite().draw(batch);	
+		tele.getSprite().draw(batch);
 		// Codigo para tocar solo un robot
 		 for (int i = 0; i< robots.size() ; i++){
 			 	robots.get(i).live(camera);
-			 	batch.draw(robots.get(i).getFrameRun(), robots.get(i).getX(), robots.get(i).getY(), 10, 10);
+			 	batch.draw(robots.get(i).getFrameRun(), robots.get(i).getX(), robots.get(i).getY(), 10, 12);
 				//Codigo de colisiones para los paneles
 				if(robots.get(i).getPosition().dst(tele.getPosition())<=7){
 					robots.get(i).collisionX();
@@ -65,9 +65,6 @@ public class Level {
 		 //Se ejecuta solo si existe un grupo de robots seleccionados
 		if(!selectedTemp.empty())
 			robotSelected();
-		
-		
-		//System.out.println("Tiempo "+time);
 		
 		if(((int) time)%5==0)
 		if(robots.size()<1) respawnRobots();
@@ -96,5 +93,13 @@ public class Level {
 		backgroundGame = manager.get("audio/background_game.ogg");
 		backgroundGame.play();
 		backgroundGame.setLooping(true);
+	}
+	
+	public void dispose(){
+		for (int i = 0; i< robots.size() ; i++){
+			robots.get(i).disposeAssets();
+		}
+		robots.clear();
+		selectedTemp.clear();
 	}
 }

@@ -19,6 +19,7 @@ public class ScreenMenu extends AbstractScreen{
 
 	public ScreenMenu(ChafaGame game) {
         super(game);
+        //game.ExternalHandler.showFullAd(true);
     }
 	
 	@Override
@@ -64,9 +65,6 @@ public class ScreenMenu extends AbstractScreen{
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		batch.dispose();
-		texture.dispose();
-		game.manager.unload("juego.png");
 	}
 
 }

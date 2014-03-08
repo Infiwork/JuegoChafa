@@ -16,7 +16,6 @@ public class ScreenGame extends AbstractScreen{
 	
 	Texture textfondo;
 	TextureRegion textReg;
-	
 	Sprite fondo;
 	
 	Level level;
@@ -41,7 +40,7 @@ public class ScreenGame extends AbstractScreen{
 		fondo.setSize(worldWidth, worldHeight);
 		fondo.draw(batch);
 		level.render(camera, batch);
-		 	
+		 
 		batch.end();	
 	}
 		
@@ -60,23 +59,31 @@ public class ScreenGame extends AbstractScreen{
 		long time_start, time_end;
         time_start = System.currentTimeMillis();
 		level = new Level(game.manager);
-		textfondo = game.manager.get("fondo.png");
+		textfondo = game.manager.get("escenario.png");
 		textReg =  new TextureRegion(textfondo, 1024, 700);
 		time_end = System.currentTimeMillis();
         System.out.println("the task has taken "+ ( time_end - time_start ) +" milliseconds");
-		fondo= new Sprite(textReg);
-		
+		fondo = new Sprite(textReg);
 		touchpoint = new Vector3();
+		System.out.println(level);
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
+		batch.dispose();
+		textfondo.dispose();
 		game.manager.unload("audio/background_game.ogg");
 		game.manager.unload("audio/robot_jump.ogg");
-		game.manager.unload("fondo.png");
+		game.manager.unload("audio/button.ogg");
+		game.manager.unload("escenario.png");
         game.manager.unload("robot3.png");
         game.manager.unload("circulo.png");
+        game.manager.unload("sprite_robot_azul.png");
+        System.out.println("render2");
+        level.dispose();
+        
+        
 	}
 
 }
